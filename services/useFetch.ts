@@ -1,15 +1,17 @@
 import { useEffect, useState } from "react";
 
-async function useFetch(fetchFunction: () => Promise<any>, autoFetch = true) {
+function useFetch(fetchFunction: () => Promise<any>, autoFetch = true) {
   const [data, setData] = useState<any | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<Error | null>(null);
+  console.log("inside hook");
 
   const fetchData = async () => {
     try {
       setLoading(true);
       setError(null);
       const result = await fetchFunction();
+
       setData(result);
     } catch (error) {
       setError(error instanceof Error ? error : new Error("An error occurred"));

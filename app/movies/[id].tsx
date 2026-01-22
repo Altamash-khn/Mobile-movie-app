@@ -1,7 +1,8 @@
 import React from "react";
+import { Text } from "react-native";
 
 function MovieDetails() {
-  return <div>MovieDetails</div>;
+  return <Text>MovieDetails</Text>;
 }
 
 export default MovieDetails;
