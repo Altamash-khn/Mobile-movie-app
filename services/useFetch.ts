@@ -4,7 +4,6 @@ function useFetch(fetchFunction: () => Promise<any>, autoFetch = true) {
   const [data, setData] = useState<any | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<Error | null>(null);
-  console.log("inside hook");
 
   const fetchData = async () => {
     try {
