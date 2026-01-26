@@ -33,18 +33,41 @@ const MovieInfo = ({ label, value }: MovieInfoProps) => {
   );
 };
 
-async function MovieDetails() {
+function MovieDetails() {
   const { id } = useLocalSearchParams();
   const {
     data: movie,
     loading,
     error,
-  } = await useFetch(() => fetchMovieDetails(Number(id)));
+  } = useFetch(() => fetchMovieDetails(Number(id)));
 
-  console.log("movie prodiuction companiy", movie?.production_companies);
+  if (loading) {
+    return (
+      <View className="bg-primary flex-1 items-center justify-center">
+        <Text className="text-white text-base">Loading movie details...</Text>
+      </View>
+    );
+  }
+
+  if (error) {
+    return (
+      <View className="bg-primary flex-1 items-center justify-center px-5">
+        <Text className="text-red-500 text-base text-center mb-4">
+          Failed to load movie details
+        </Text>
+
+        <TouchableOpacity
+          onPress={router.back}
+          className="bg-accent px-6 py-3 rounded-lg"
+        >
+          <Text className="text-white font-semibold">Go back</Text>
+        </TouchableOpacity>
+      </View>
+    );
+  }
 
   return (
-    <View className="bg-primary flex-1">
+    <View className="bg-primary flex-1 pt-10">
       <ScrollView contentContainerStyle={{ padding: 20 }}>
         <View>
           <Image
@@ -102,7 +125,10 @@ async function MovieDetails() {
         </View>
       </ScrollView>
 
-      <TouchableOpacity className="absolute bottom-5 left-0 right-0 mx-5 bg-accent rounded-lg py-3.5 flex flex-row items-center justify-center z-50" onPress={router.back}>
+      <TouchableOpacity
+        className="absolute bottom-5 left-0 right-0 mx-5 bg-accent rounded-lg py-3.5 flex flex-row items-center justify-center z-50"
+        onPress={router.back}
+      >
         <Image
           source={icons.arrow}
           className="size-5 mr-1 mt-0.5  rotate-180"
