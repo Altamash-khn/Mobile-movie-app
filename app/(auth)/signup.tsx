@@ -1,4 +1,11 @@
-import { Text, TextInput, TouchableOpacity, View } from "react-native";
+import { router } from "expo-router";
+import {
+  Pressable,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 function Signup() {
@@ -38,10 +45,19 @@ function Signup() {
           </Text>
         </TouchableOpacity>
 
-        <Text className="text-center text-gray-400">
-          Already have an account?{" "}
-          <Text className="text-violet-400 font-semibold">Login</Text>
-        </Text>
+        <Pressable onPress={() => router.replace("/(tabs)")} className="mb-6">
+          <Text className="text-center text-gray-500 underline">
+            Skip for now, go to Home
+          </Text>
+        </Pressable>
+
+        <View className="flex-row justify-center">
+          <Text className="text-gray-400">Already have an account? </Text>
+
+          <Pressable onPress={() => router.replace("/login")}>
+            <Text className="text-violet-400 font-semibold">login</Text>
+          </Pressable>
+        </View>
       </View>
     </SafeAreaView>
   );

@@ -1,5 +1,12 @@
+import { router } from "expo-router";
 import React from "react";
-import { Text, TextInput, TouchableOpacity, View } from "react-native";
+import {
+  Pressable,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 function Login() {
@@ -13,7 +20,6 @@ function Login() {
           Login to continue watching movies
         </Text>
 
-        {/* Email */}
         <Text className="text-gray-300 mb-2">Email</Text>
         <TextInput
           placeholder="Enter your email"
@@ -21,7 +27,6 @@ function Login() {
           className="bg-[#12182B] text-white rounded-xl px-4 py-4 mb-4"
         />
 
-        {/* Password */}
         <Text className="text-gray-300 mb-2">Password</Text>
         <TextInput
           placeholder="Enter your password"
@@ -30,18 +35,25 @@ function Login() {
           className="bg-[#12182B] text-white rounded-xl px-4 py-4 mb-6"
         />
 
-        {/* Button */}
         <TouchableOpacity className="bg-violet-500 py-4 rounded-2xl mb-4">
           <Text className="text-center text-white font-semibold text-lg">
             Login
           </Text>
         </TouchableOpacity>
 
-        {/* Footer */}
-        <Text className="text-center text-gray-400">
-          Don’t have an account?{" "}
-          <Text className="text-violet-400 font-semibold">Sign up</Text>
-        </Text>
+        <Pressable onPress={() => router.replace("/(tabs)")} className="mb-6">
+          <Text className="text-center text-gray-500 underline">
+            Skip for now, go to Home
+          </Text>
+        </Pressable>
+
+        <View className="flex-row justify-center">
+          <Text className="text-gray-400">Don't have an account? </Text>
+
+          <Pressable onPress={() => router.replace("/signup")}>
+            <Text className="text-violet-400 font-semibold">Sign up</Text>
+          </Pressable>
+        </View>
       </View>
     </SafeAreaView>
   );
