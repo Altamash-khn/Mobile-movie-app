@@ -1,16 +1,30 @@
-import { icons } from "@/constants/icons";
-import React from "react";
-import { Image, Text, View } from "react-native";
+import AuthButton from "@/components/AuthButton";
+import { router } from "expo-router";
+import { Text, View } from "react-native";
 
-const Profile = () => {
+function Profile() {
   return (
-    <View className="bg-primary flex-1 px-10">
-      <View className="flex flex-1 flex-col justify-center items-center gap-5">
-        <Image source={icons.person} className="size-10" tintColor="#fff" />
-        <Text className="text-gray-500 text-base">Profile</Text>
-      </View>
+    <View className="flex-1 bg-[#0B0F1A] px-6 justify-center">
+      <Text className="text-3xl font-bold text-white text-center mb-2">
+        Profile
+      </Text>
+      <Text className="text-gray-400 text-center mb-10">
+        Login or signup to save and track movies
+      </Text>
+
+      <AuthButton
+        title="Login"
+        onPress={() => router.push("/login")}
+        className="mb-5"
+      />
+
+      <AuthButton
+        title="Sign Up"
+        variant="outline"
+        onPress={() => router.push("/signup")}
+      />
     </View>
   );
-};
+}
 
 export default Profile;
