@@ -1,5 +1,6 @@
+import { useAuth } from "@/context/AuthContext";
 import { router } from "expo-router";
-import { useState } from "react";
+import { Controller, useForm } from "react-hook-form";
 import {
   Pressable,
   Text,
@@ -10,17 +11,27 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 
 function Signup() {
-  const [user, setUser] = useState({
-    name: "",
-    email: "",
-    password: "",
+  const { signup } = useAuth();
+
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    defaultValues: {
+      name: "",
+      email: "",
+      password: "",
+    },
   });
 
-  function handleInputChange(field, text) {
-    setUser((prev) => ({
-      ...prev,
-      [field]: text,
-    }));
+  async function handleSignup(data: AuthFormData) {
+    try {
+      await signup(data); // { name, email, password }
+      router.replace("/(tabs)");
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   return (
@@ -32,34 +43,86 @@ function Signup() {
         <Text className="text-gray-400 mb-8">Join us and explore movies</Text>
 
         <Text className="text-gray-300 mb-2">Name</Text>
-        <TextInput
-          value={user.name}
-          onChangeText={(text) => handleInputChange("name", text)}
-          placeholder="Enter your name"
-          placeholderTextColor="#6B7280"
-          className="bg-[#12182B] text-white rounded-xl px-4 py-4 mb-4"
+        <Controller // bridge between input values and react-hook-form
+          control={control} // tells react-hook-form to start tracking it
+          name="name" // must match with the one you wanna cnct in default values
+          rules={{
+            // validations
+            required: "Name is required",
+            minLength: {
+              value: 2,
+              message: "Name must be at least 2 characters",
+            },
+          }}
+          render={({ field: { onChange, value } }) => (
+            <TextInput
+              value={value}
+              onChangeText={onChange}
+              placeholder="Enter your name"
+              placeholderTextColor="#6B7280"
+              className="bg-[#12182B] text-white rounded-xl px-4 py-4"
+            />
+          )}
         />
+        {errors.name && (
+          <Text className="text-red-400 mt-1.5">{errors.name.message}</Text>
+        )}
 
-        <Text className="text-gray-300 mb-2">Email</Text>
-        <TextInput
-          value={user.email}
-          onChangeText={(text) => handleInputChange("email", text)}
-          placeholder="Enter your email"
-          placeholderTextColor="#6B7280"
-          className="bg-[#12182B] text-white rounded-xl px-4 py-4 mb-4"
+        <Text className="text-gray-300 mb-2 mt-4">Email</Text>
+        <Controller
+          control={control}
+          name="email"
+          rules={{
+            required: "Email is required",
+            pattern: {
+              value: /\S+@\S+\.\S+/,
+              message: "Enter a valid email",
+            },
+          }}
+          render={({ field: { onChange, value } }) => (
+            <TextInput
+              value={value}
+              onChangeText={onChange}
+              placeholder="Enter your email"
+              placeholderTextColor="#6B7280"
+              className="bg-[#12182B] text-white rounded-xl px-4 py-4"
+            />
+          )}
         />
+        {errors.email && (
+          <Text className="text-red-400 mt-1.5">{errors.email.message}</Text>
+        )}
 
-        <Text className="text-gray-300 mb-2">Password</Text>
-        <TextInput
-          value={user.password}
-          onChangeText={(text) => handleInputChange("password", text)}
-          placeholder="Create a password"
-          placeholderTextColor="#6B7280"
-          secureTextEntry
-          className="bg-[#12182B] text-white rounded-xl px-4 py-4 mb-6"
+        <Text className="text-gray-300 mb-2 mt-4">Password</Text>
+        <Controller
+          control={control}
+          name="password"
+          rules={{
+            required: "Password is required",
+            minLength: {
+              value: 6,
+              message: "Password must be at least 6 characters",
+            },
+          }}
+          render={({ field: { onChange, value } }) => (
+            <TextInput
+              value={value}
+              onChangeText={onChange}
+              placeholder="Create a password"
+              placeholderTextColor="#6B7280"
+              secureTextEntry
+              className="bg-[#12182B] text-white rounded-xl px-4 py-4 "
+            />
+          )}
         />
+        {errors.password && (
+          <Text className="text-red-400 mt-1.5">{errors.password.message}</Text>
+        )}
 
-        <TouchableOpacity className="bg-violet-500 py-4 rounded-2xl mb-4">
+        <TouchableOpacity
+          className="bg-violet-500 py-4 rounded-2xl my-4"
+          onPress={handleSubmit(handleSignup)}
+        >
           <Text className="text-center text-white font-semibold text-lg">
             Sign Up
           </Text>

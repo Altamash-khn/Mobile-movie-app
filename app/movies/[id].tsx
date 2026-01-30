@@ -1,4 +1,5 @@
 import { icons } from "@/constants/icons";
+import { useAuth } from "@/context/AuthContext";
 import { fetchMovieDetails } from "@/services/api";
 import useFetch from "@/services/useFetch";
 import { router, useLocalSearchParams } from "expo-router";
@@ -35,6 +36,9 @@ const MovieInfo = ({ label, value }: MovieInfoProps) => {
 
 function MovieDetails() {
   const { id } = useLocalSearchParams();
+  const { user } = useAuth();
+  console.log("user", user);
+
   const {
     data: movie,
     loading,
