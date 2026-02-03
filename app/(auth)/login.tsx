@@ -1,6 +1,7 @@
 import { useAuth } from "@/context/AuthContext";
+import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
-import React from "react";
+import React, { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import {
   Pressable,
@@ -14,6 +15,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 function Login() {
   const { login } = useAuth();
+  const [showPassword, setShowPassword] = useState(false);
   const {
     control,
     handleSubmit,
@@ -82,14 +84,27 @@ function Login() {
               },
             }}
             render={({ field: { onChange, value } }) => (
-              <TextInput
-                value={value}
-                onChangeText={onChange}
-                placeholder="enter your pasword"
-                secureTextEntry
-                placeholderTextColor="#6B7280"
-                className="bg-[#12182B] text-white rounded-xl px-4 py-4 mb-3"
-              />
+              <View>
+                <TextInput
+                  value={value}
+                  onChangeText={onChange}
+                  placeholder="enter your pasword"
+                  secureTextEntry={!showPassword}
+                  placeholderTextColor="#6B7280"
+                  className="bg-[#12182B] text-white rounded-xl px-4 py-4 mb-3"
+                />
+
+                <Pressable
+                  onPress={() => setShowPassword(!showPassword)}
+                  className="absolute right-4 top-1/2 -translate-y-1/2"
+                >
+                  <Ionicons
+                    name={showPassword ? "eye-off" : "eye"}
+                    size={22}
+                    color="#9CA3AF"
+                  />
+                </Pressable>
+              </View>
             )}
           />
           {errors.password && (

@@ -81,3 +81,27 @@ interface AuthFormData {
   password: string;
   name?: string;
 }
+
+interface SaveMovie {
+  userId: string | number;
+  movieId: string | number;
+  title: string;
+  poster: string;
+}
+
+interface MovieInfoProps {
+  label: string;
+  value?: string | number | null;
+}
+
+interface genreProps {
+  id: number;
+  name: string;
+}
+
+interface ProductionCompany {
+  id: number;
+  logo_path: string | null;
+  name: string;
+  origin_country: string;
+}

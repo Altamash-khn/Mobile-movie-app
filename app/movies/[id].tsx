@@ -3,25 +3,8 @@ import { useAuth } from "@/context/AuthContext";
 import { fetchMovieDetails } from "@/services/api";
 import useFetch from "@/services/useFetch";
 import { router, useLocalSearchParams } from "expo-router";
-import React from "react";
+import React, { useState } from "react";
 import { Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
-
-interface MovieInfoProps {
-  label: string;
-  value?: string | number | null;
-}
-
-interface genreProps {
-  id: number;
-  name: string;
-}
-
-interface ProductionCompany {
-  id: number;
-  logo_path: string | null;
-  name: string;
-  origin_country: string;
-}
 
 const MovieInfo = ({ label, value }: MovieInfoProps) => {
   return (
@@ -37,7 +20,8 @@ const MovieInfo = ({ label, value }: MovieInfoProps) => {
 function MovieDetails() {
   const { id } = useLocalSearchParams();
   const { user } = useAuth();
-  console.log("user", user);
+  const [savedDoc, setSavedDoc] = useState<any>(null);
+  const isLoggedIn = !!user;
 
   const {
     data: movie,

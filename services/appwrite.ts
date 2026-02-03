@@ -3,6 +3,7 @@ import { Account, Client, Databases, ID, Query } from "react-native-appwrite";
 
 const DATABASE_ID = process.env.EXPO_PUBLIC_APPWRITE_DATABASE_ID!;
 const COLLECTION_ID = process.env.EXPO_PUBLIC_APPWRITE_COLLECTION_ID!;
+const MOVIES_COLLECTION_ID = process.env.EXPO_PUBLIC_APPWRITE_SAVED_MOVIES_ID!;
 
 const client = new Client()
   .setEndpoint("https://cloud.appwrite.io/v1")
@@ -56,4 +57,36 @@ export const getTrendingMovies = async (): Promise<
     console.log(error);
     return undefined;
   }
+};
+
+export const saveMovie = async ({
+  userId,
+  movieId,
+  title,
+  poster,
+}: SaveMovie) => {
+  return database.createDocument(
+    DATABASE_ID,
+    MOVIES_COLLECTION_ID,
+    "unique()",
+    {
+      userId,
+      movieId,
+      title,
+      poster,
+    },
+  );
+};
+
+export const removeMovie = async (docId: string) => {
+  return database.deleteDocument(DATABASE_ID, MOVIES_COLLECTION_ID, docId);
+};
+
+export const getSavedMovie = async (userId: string, movieId: number) => {
+  const res = await database.listDocuments(DATABASE_ID, COLLECTION_ID, [
+    Query.equal("userId", userId),
+    Query.equal("movieId", movieId),
+  ]);
+
+  return res.documents[0] || null;
 };

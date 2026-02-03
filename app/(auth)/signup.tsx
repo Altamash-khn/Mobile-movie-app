@@ -1,5 +1,7 @@
 import { useAuth } from "@/context/AuthContext";
+import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
+import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import {
   Pressable,
@@ -13,6 +15,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 function Signup() {
   const { signup } = useAuth();
+  const [showPassword, setShowPassword] = useState(false);
 
   const {
     control,
@@ -96,6 +99,7 @@ function Signup() {
           )}
 
           <Text className="text-gray-300 mb-2 mt-4">Password</Text>
+
           <Controller
             control={control}
             name="password"
@@ -107,16 +111,30 @@ function Signup() {
               },
             }}
             render={({ field: { onChange, value } }) => (
-              <TextInput
-                value={value}
-                onChangeText={onChange}
-                placeholder="Create a password"
-                placeholderTextColor="#6B7280"
-                secureTextEntry
-                className="bg-[#12182B] text-white rounded-xl px-4 py-4 "
-              />
+              <View className="relative">
+                <TextInput
+                  value={value}
+                  onChangeText={onChange}
+                  placeholder="Create a password"
+                  placeholderTextColor="#6B7280"
+                  secureTextEntry={!showPassword}
+                  className="bg-[#12182B] text-white rounded-xl px-4 py-4 pr-12"
+                />
+
+                <Pressable
+                  onPress={() => setShowPassword(!showPassword)}
+                  className="absolute right-4 top-1/2 -translate-y-1/2"
+                >
+                  <Ionicons
+                    name={showPassword ? "eye-off" : "eye"}
+                    size={22}
+                    color="#9CA3AF"
+                  />
+                </Pressable>
+              </View>
             )}
           />
+
           {errors.password && (
             <Text className="text-red-400 mt-1.5">
               {errors.password.message}
