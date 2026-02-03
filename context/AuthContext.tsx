@@ -1,5 +1,12 @@
 import { account } from "@/services/appwrite";
-import { createContext, ReactNode, useContext, useState } from "react";
+
+import {
+  createContext,
+  ReactNode,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 
 interface UserPayload {
   email: string;
@@ -22,10 +29,8 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | null>(null);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-  const [user, setUser] = useState<User | null>({
-    name: "ayan",
-    email: "ayank829130@gmail.com",
-  });
+  const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState(true);
 
   async function signup({ email, password, name }: UserPayload) {
     await account.create("unique()", email, password, name);
@@ -54,6 +59,24 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     await account.deleteSession("current");
     setUser(null);
   };
+
+  useEffect(() => {
+    async function checkSession() {
+      try {
+        const currentUser = await account.get();
+
+        setUser(currentUser);
+      } catch (error) {
+        setUser(null);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    checkSession();
+  }, []);
+
+  if (loading) return null;
 
   return (
     <AuthContext.Provider value={{ login, signup, logout, user }}>
