@@ -7,41 +7,47 @@ interface UserPayload {
   name?: string;
 }
 
+interface User {
+  name: string;
+  email: string;
+}
+
 interface AuthContextType {
   login: (payload: UserPayload) => Promise<void>;
   signup: (payload: UserPayload) => Promise<void>;
   logout: () => Promise<void>;
-  user: string | null;
+  user: User | null;
 }
 
 const AuthContext = createContext<AuthContextType | null>(null);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-  const [user, setUser] = useState<any | null>(null);
+  const [user, setUser] = useState<User | null>({
+    name: "ayan",
+    email: "ayank829130@gmail.com",
+  });
 
   async function signup({ email, password, name }: UserPayload) {
-    // 1. create the user in appwrites database
     await account.create("unique()", email, password, name);
-
-    // 2️⃣ Create session (auto login)
     await account.createEmailPasswordSession(email, password);
 
-    // 3️⃣ Get logged-in user
     const currentUser = await account.get();
 
-    // 4️⃣ Save user globally
-    setUser(currentUser);
+    setUser({
+      name: currentUser.name,
+      email: currentUser.email,
+    });
   }
 
   async function login({ email, password }: UserPayload) {
-    // 1️⃣ Create session
     await account.createEmailPasswordSession(email, password);
 
-    // 2️⃣ Get user
     const currentUser = await account.get();
 
-    // 3️⃣ Save globally
-    setUser(currentUser);
+    setUser({
+      name: currentUser.name,
+      email: currentUser.email,
+    });
   }
 
   const logout = async () => {
@@ -63,10 +69,3 @@ export const useAuth = () => {
   }
   return context;
 };
-
-//   const [loading, setLoading] = useState(true);
-
-//   useEffect(() => {
-//     // 🔥 Step 3 will go here (session check)
-//     setLoading(false);
-//   }, []);
