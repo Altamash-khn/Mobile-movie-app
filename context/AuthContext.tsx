@@ -15,6 +15,7 @@ interface UserPayload {
 }
 
 interface User {
+  id: string;
   name: string;
   email: string;
 }
@@ -39,6 +40,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const currentUser = await account.get();
 
     setUser({
+      id: currentUser.$id,
       name: currentUser.name,
       email: currentUser.email,
     });
@@ -50,6 +52,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const currentUser = await account.get();
 
     setUser({
+      id: currentUser.$id,
       name: currentUser.name,
       email: currentUser.email,
     });
@@ -65,7 +68,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       try {
         const currentUser = await account.get();
 
-        setUser(currentUser);
+        setUser({
+          ...currentUser,
+          id: currentUser.$id,
+        });
       } catch (error) {
         setUser(null);
       } finally {

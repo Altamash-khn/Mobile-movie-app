@@ -68,7 +68,7 @@ export const saveMovie = async ({
   return database.createDocument(
     DATABASE_ID,
     MOVIES_COLLECTION_ID,
-    "unique()",
+    ID.unique(),
     {
       userId,
       movieId,
@@ -83,10 +83,24 @@ export const removeMovie = async (docId: string) => {
 };
 
 export const getSavedMovie = async (userId: string, movieId: number) => {
-  const res = await database.listDocuments(DATABASE_ID, COLLECTION_ID, [
-    Query.equal("userId", userId),
-    Query.equal("movieId", movieId),
-  ]);
+  const res = await database.listDocuments(
+    DATABASE_ID,
+    MOVIES_COLLECTION_ID,
+    [
+      Query.equal("userId", userId),
+      Query.equal("movieId", movieId),
+    ]
+  );
 
   return res.documents[0] || null;
+};
+
+export const getUserSavedMovies = async (userId: string) => {
+  const res = await database.listDocuments(
+    DATABASE_ID,
+    MOVIES_COLLECTION_ID,
+    [Query.equal("userId", userId)]
+  );
+
+  return res.documents;
 };

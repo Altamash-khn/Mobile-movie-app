@@ -1,10 +1,13 @@
 import { icons } from "@/constants/icons";
 import { useAuth } from "@/context/AuthContext";
 import { fetchMovieDetails } from "@/services/api";
+import { getSavedMovie, removeMovie, saveMovie } from "@/services/appwrite";
 import useFetch from "@/services/useFetch";
+import { Ionicons } from "@expo/vector-icons";
 import { router, useLocalSearchParams } from "expo-router";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
+
 
 const MovieInfo = ({ label, value }: MovieInfoProps) => {
   return (
@@ -21,13 +24,47 @@ function MovieDetails() {
   const { id } = useLocalSearchParams();
   const { user } = useAuth();
   const [savedDoc, setSavedDoc] = useState<any>(null);
-  const isLoggedIn = !!user;
+  // const isLoggedIn = !!user;
 
   const {
     data: movie,
     loading,
     error,
   } = useFetch(() => fetchMovieDetails(Number(id)));
+
+  useEffect(() => {
+  if (!user || !movie) return;
+
+  async function checkSaved() {
+    const doc = await getSavedMovie(user!.id, movie.id);
+    setSavedDoc(doc);
+  }
+
+  checkSaved();
+}, [user, movie]);
+
+async function handleToggleSave() {
+  if (!user) {
+    router.push("/login");
+    return;
+  }
+
+  if (savedDoc) {
+    await removeMovie(savedDoc.$id);
+    setSavedDoc(null);
+  } else {
+    const doc = await saveMovie({
+      userId: user.id,
+      movieId: movie.id,
+      title: movie.title,
+      poster: movie.poster_path,
+    });
+
+    setSavedDoc(doc);
+  }
+}
+
+
 
   if (loading) {
     return (
@@ -55,7 +92,7 @@ function MovieDetails() {
   }
 
   return (
-    <View className="bg-primary flex-1 pt-10">
+    <View className="bg-primary flex-1 pt-10 mb-10">
       <ScrollView contentContainerStyle={{ padding: 20 }}>
         <View>
           <Image
@@ -113,17 +150,34 @@ function MovieDetails() {
         </View>
       </ScrollView>
 
-      <TouchableOpacity
-        className="absolute bottom-5 left-0 right-0 mx-5 bg-accent rounded-lg py-3.5 flex flex-row items-center justify-center z-50"
-        onPress={router.back}
-      >
-        <Image
-          source={icons.arrow}
-          className="size-5 mr-1 mt-0.5  rotate-180"
-          tintColor="#fff"
-        />
-        <Text className="text-white font-semibold text-base">Go back</Text>
-      </TouchableOpacity>
+     
+          <TouchableOpacity
+            onPress={handleToggleSave}
+            className="absolute bottom-20 left-0 right-0 mx-5 bg-accent rounded-lg py-3.5 flex flex-row items-center justify-center"
+          >
+                <Ionicons
+                  name={savedDoc ? "bookmark" : "bookmark-outline"}
+                  size={20}
+                  color="#fff"
+                  style={{ marginRight: 6 }}
+                />
+
+                <Text className="text-white font-semibold text-base">
+                  {savedDoc ? "Saved" : "Save"}
+                </Text>
+        </TouchableOpacity>
+
+          <TouchableOpacity
+            className="absolute bottom-5 left-0 right-0 mx-5 bg-accent rounded-lg py-3.5 flex flex-row items-center justify-center z-50"
+            onPress={router.back}
+          >
+            <Image
+              source={icons.arrow}
+              className="size-5 mr-1 mt-0.5  rotate-180"
+              tintColor="#fff"
+            />
+            <Text className="text-white font-semibold text-base">Go back</Text>
+          </TouchableOpacity>
     </View>
   );
 }
