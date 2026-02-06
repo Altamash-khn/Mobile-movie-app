@@ -17,17 +17,10 @@ This project focuses on practicing **real-world mobile app development concepts*
 
 ---
 
-## App Preview
+## 🖼 App Preview
 
-### Home Screen
-
-![Home Screen](./assets/images/home.jpeg)
-
-### Movie Details
-
-![Profile Screen](./assets/images/profile.jpeg)
-
-👉 [Watch the demo video](./demo.mp4)
+<img src="./assets/images/home.jpeg" width="250" />
+<img src="./assets/images/profile.jpeg" width="250" />
 
 ---
 
