@@ -7,40 +7,57 @@ This project focuses on practicing **real-world mobile app development concepts*
 
 ## Features
 
-- Browse popular and trending movies (based on recent user searches)  
-- View detailed movie information  
-- Track searched movies and store top results  
-- Display last 5 searched movies as trending  
-- Save movies to favorites (logged-in users only)  
-- User authentication using Appwrite  
-- Clean and responsive UI with NativeWind  
+- Browse popular and trending movies (based on recent user searches)
+- View detailed movie information
+- Track searched movies and store top results
+- Display last 5 searched movies as trending
+- Save movies to favorites (logged-in users only)
+- User authentication using Appwrite
+- Clean and responsive UI with NativeWind
+
+---
+
+## App Preview
+
+### Home Screen
+
+![Home Screen](./assets/images/home.jpeg)
+
+### Movie Details
+
+![Profile Screen](./assets/images/profile.jpeg)
+
+👉 [Watch the demo video](./demo.mp4)
 
 ---
 
 ## Tech Stack
 
-- React Native (Expo)  
-- React  
-- TypeScript & JavaScript  
-- NativeWind (Tailwind CSS for React Native)  
-- TMDB API (Movie data)  
-- Appwrite (Authentication & Database)  
+- React Native (Expo)
+- React
+- TypeScript & JavaScript
+- NativeWind (Tailwind CSS for React Native)
+- TMDB API (Movie data)
+- Appwrite (Authentication & Database)
 
 ---
 
 ## Project Setup
 
 ### 1️⃣ Clone the repository
+
 ```bash
 git clone <https://github.com/Altamash-khn/Mobile-movie-app.git>
 ```
 
 ### 2️⃣ Install dependencies
+
 ```bash
 npm install
 ```
 
 ### 3️⃣ Environment Variables
+
 Create a `.env` file and add your credentials:
 
 ```env
@@ -56,6 +73,7 @@ EXPO_PUBLIC_APPWRITE_SAVED_MOVIES_ID=YOUR_API_KEY
 ---
 
 ### 4️⃣ Run the app
+
 ```bash
 npx expo start
 ```
