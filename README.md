@@ -17,7 +17,7 @@ This project focuses on practicing **real-world mobile app development concepts*
 
 ---
 
-## 🖼 App Preview
+## App Preview
 
  **Live Preview:** https://apps-previews.vercel.app/
 
@@ -34,6 +34,7 @@ This project focuses on practicing **real-world mobile app development concepts*
 - NativeWind (Tailwind CSS for React Native)
 - TMDB API (Movie data)
 - Appwrite (Authentication & Database)
+- Context API (user state management)
 
 ---
 
